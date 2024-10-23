@@ -1,6 +1,8 @@
 ## Getting Started
 
-CNT Starter enables you to create web application with contentful, by cloning https://github.com/codeandtheory/candt-nextjs-template.
+CNT Starter enables you to create web application with CMS of your choice, by cloning https://github.com/codeandtheory/candt-nextjs-template.
+
+** But currently we support only Contentful **
 
 CNT Starter requires a few configuration options to create your web application.
 

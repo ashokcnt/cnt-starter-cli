@@ -20,7 +20,7 @@ program
   .description('CLI to some JavaScript string utilities')
   .argument('[directory]')
   .option('--cms-cf, --contentful', 'Initialize as a Contentful project. (default)')
-  .option('--cms-s, --sanity', 'Initialize as a Sanity project.')
+  .option('--cms-o, --others', 'Initialize as a others project.')
   .version('0.0.0');
 
 program.parse();

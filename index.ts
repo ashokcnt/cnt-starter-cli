@@ -149,49 +149,51 @@ export async function createApplication(options: {
 
   try {
     const { projectPath, cms, accessToken, spaceId, environment, collectionName } = options
-    console.log(projectPath, cms, accessToken, spaceId, environment, collectionName);
-  
+
     // download a zip file from github and exptract in to the app directory
-  
+
     // Example usage
     // const githubZipUrl = `https://github.com/ashokcnt/cnt-starter`; // Replace with your GitHub URL
     const outputDirectory = basename(projectPath); // Directory where files will be extracted
-  
+
     console.log(outputDirectory);
-  
+
     await ensureDirectoryExists(outputDirectory);
-  
+
     // stderr is sent to stderr of parent process
     // you can set options.stdio if you want it to go elsewhere
     let stdout = await execSync('git clone https://github.com/codeandtheory/candt-nextjs-template.git ' + outputDirectory, { stdio: 'inherit' });
-  
-    // run npm install in outputDirectory
-    await execSync(`yarn add graphql graphql-codegen graphql-request graphql-tag dotenv`, { cwd: outputDirectory });
-    await execSync(`yarn add -D @graphql-codegen/cli  @graphql-codegen/typescript-operations @graphql-codegen/typescript-resolvers @graphql-codegen/typescript @graphql-codegen/typescript-graphql-request @parcel/watcher`, { cwd: outputDirectory });
-  
-    await addscriptsToPackageJson(outputDirectory);
-  
-  
-    await createEnv(accessToken, spaceId, environment, outputDirectory);
-  
-    
-    await addRequireFiles(outputDirectory, collectionName);
 
-    
-    // const gql = await execSync(`yarn generate:watch`, { cwd: outputDirectory });
-    
-    // console.log(gql.toString());
+    if (cms === 'contentful') {
 
-    await spawn('yarn', ['generate'], { cwd: outputDirectory, detached: false, stdio: 'inherit' });
-    
-    await spawn('yarn', ['dev'], { cwd: outputDirectory, detached: false, stdio: 'inherit' });;
+      // run npm install in outputDirectory
+      await execSync(`yarn add graphql graphql-codegen graphql-request graphql-tag dotenv`, { cwd: outputDirectory });
+      await execSync(`yarn add -D @graphql-codegen/cli  @graphql-codegen/typescript-operations @graphql-codegen/typescript-resolvers @graphql-codegen/typescript @graphql-codegen/typescript-graphql-request @parcel/watcher`, { cwd: outputDirectory });
+
+      await addscriptsToPackageJson(outputDirectory);
+
+
+      await createEnv(accessToken, spaceId, environment, outputDirectory);
+
+
+      await addRequireFiles(outputDirectory, collectionName);
+
+
+      await spawn('yarn', ['generate'], { cwd: outputDirectory, detached: false, stdio: 'inherit' });
+
+    } else {
+
+      await execSync(`yarn`, { cwd: outputDirectory });
+
+    }
+
+    await spawn('yarn', ['dev'], { cwd: outputDirectory, detached: false, stdio: 'inherit' });
 
   } catch (error) {
     console.log(error);
   }
 
 }
-
 
 export class DownloadError extends Error { }
 async function addRequireFiles(outputDirectory: string, collectionName: string) {
@@ -251,15 +253,15 @@ const config: CodegenConfig = {
 export default config;
 `);
 
-await ensureDirectoryExists(`${outputDirectory}/src/data/graphql`);
+  await ensureDirectoryExists(`${outputDirectory}/src/data/graphql`);
 
   const titleCaseCollectionName = collectionName
     .toLowerCase()
     .replace(/\b[a-z]/g, char => char.toUpperCase())
     .replace(/-/g, ' ');
 
-const getPath = resolve(outputDirectory, `src/data/graphql/get${titleCaseCollectionName}.graphql`);
-await fs.promises.writeFile(getPath, `
+  const getPath = resolve(outputDirectory, `src/data/graphql/get${titleCaseCollectionName}.graphql`);
+  await fs.promises.writeFile(getPath, `
 query Get${titleCaseCollectionName}($limit: Int!, $skip: Int!) {
   ${collectionName}Collection(limit: $limit, skip: $skip) {
     items {

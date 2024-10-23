@@ -4,6 +4,8 @@ CNT Starter enables you to create web application with contentful, by cloning ht
 
 CNT Starter requires a few configuration options to create your web application.
 
+# Prerequisite: Ensure GitHub SSH setup is completed before proceeding. https://docs.github.com/en/authentication/connecting-to-github-with-ssh
+
 You can run cnt-starter with the following option:
 
 # cnt-starter --cms-cf
@@ -12,7 +14,7 @@ You can run cnt-starter with the following option:
 
 Please provide a name for your project, this will be used as the name of your project folder.
 
-Example: my-app-name
+Example: my-cnt-app
 
 ### 2. Choose your CMS
 

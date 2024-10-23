@@ -15,8 +15,6 @@ const fs = require('fs');
 
 const program = new Command();
 
-
-
 program
   .name('cnt-starter')
   .description('CLI to some JavaScript string utilities')
@@ -29,10 +27,7 @@ program.parse();
 
 let options = program.opts();
 
-console.log(options);
-
 let projectPath: string = '';
-
 
 (async () => {
   //project path
@@ -41,7 +36,7 @@ let projectPath: string = '';
     type: 'text',
     name: 'path',
     message: 'What is your project named?',
-    initial: 'my-app',
+    initial: 'my-cnt-app',
     validate: (name: string) => {
       const validation = validateNpmName(basename(resolve(name)))
       if (validation.valid) {
@@ -84,22 +79,46 @@ let projectPath: string = '';
       {
         type: 'text',
         name: 'accessToken',
-        message: 'Please provide a contentful access token'
+        message: 'Please provide a contentful access token',
+        validate: (accessToken: string) => {
+          if (accessToken.trim() !== '') {
+            return true
+          }
+          return 'Access token can not be empty'
+        },
       },
       {
         type: 'text',
         name: 'spaceId',
-        message: 'Please provide a contentful space id'
+        message: 'Please provide a contentful space id',
+        validate: (spaceId: string) => {
+          if (spaceId.trim() !== '') {
+            return true
+          }
+          return 'Space id can not be empty'
+        },
       },
       {
         type: 'text',
         name: 'environment',
-        message: 'Please provide a contentful enviroment id'
+        message: 'Please provide a contentful enviroment id',
+        validate: (environment: string) => {
+          if (environment.trim() !== '') {
+            return true
+          }
+          return 'Environment id can not be empty'
+        },
       },
       {
         type: 'text',
         name: 'collectionName',
-        message: 'Please provide a contentful collection name'
+        message: 'Please provide a contentful collection name',
+        validate: (collectionName: string) => {
+          if (collectionName.trim() !== '') {
+            return true
+          }
+          return 'Collection name can not be empty'
+        },
       },
     ];
     const { accessToken, spaceId, environment, collectionName } = await prompts(questions);
@@ -108,9 +127,6 @@ let projectPath: string = '';
 
   }
 
-
-  console.log(options);
-
   try {
     await createApplication(options)
   } catch (reason) {
@@ -118,24 +134,6 @@ let projectPath: string = '';
       throw reason
     }
   }
-
-
-
-
-  // {
-  //   type: (prev: string) => prev == 'contentful' ? 'text' : null,
-  //   name: 'accessToken',
-  //   message: 'Please provide a contentful access token'
-  // },
-  // {
-  //   type: (prev: string) => prev == 'accessToken' ? 'text' : null,
-  //   name: 'accessToken',
-  //   message: 'Please provide a contentful access token'
-  // },
-
-  //CONTENTFUL_SPACE_ID=3hz90jo4yos8
-  // CONTENTFUL_ACCESS_TOKEN=dmAFKVYkkVXCw70FAxbjzJqYUh5fBg4ZydiC9KgkyFw
-  // CONTENTFUL_ENVIRONMENT=master
 
 })();
 

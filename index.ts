@@ -61,7 +61,7 @@ let projectPath: string = '';
         message: 'What is your favorite CMS',
         choices: [
           { title: 'Contentful', value: 'contentful' },
-          { title: 'Sanity', value: 'sanity' },
+          { title: 'Others', value: 'others' },
         ],
       },
 

@@ -1,5 +1,5 @@
 {
-  "name": "cnt-starter",
+  "name": "cnt-starter-cli",
   "version": "1.0.0",
   "main": "index.js",
   "bin": {
